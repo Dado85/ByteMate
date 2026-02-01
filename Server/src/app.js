@@ -11,6 +11,8 @@ require("dotenv").config();
 require("./config/db");
 require("./service/cronJobs");
 const app = express();
+app.set("trust proxy", 1);
+
 const server = http.createServer(app);
 app.use(
   cors({
