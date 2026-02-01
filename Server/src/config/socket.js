@@ -3,7 +3,7 @@ const {addmsgtoConversation}= require("../controller/msgController");
 const intializeSocket = (server) => {
   const io = socket(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: "https://bytemateui.onrender.com",
     },
   });
   io.on("connection", (socket) => {
