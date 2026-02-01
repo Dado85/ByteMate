@@ -52,7 +52,8 @@ async function login(req, res) {
     const token = await user.getJWT();
     res.cookie("token", token, { httpOnly: true });
     return res.status(200).json({
-      success: true,
+        secure: true,         
+  sameSite: "none", 
       message: "logged in successfull",
       data: user,
     });
