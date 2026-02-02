@@ -50,9 +50,11 @@ async function login(req, res) {
       });
     }
     const token = await user.getJWT();
-    res.cookie("token", token, { httpOnly: true,
-  secure: true,       
-  sameSite: "none",});
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     return res.status(200).json({
       message: "logged in successfull",
       data: user,
@@ -62,8 +64,10 @@ async function login(req, res) {
 
 async function logout(req, res) {
   res.cookie("token", null, {
-    expires: new Date(0),
     httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    expires: new Date(0),
   });
   res.status(200).json({ message: "Logged out successfully" });
 }
