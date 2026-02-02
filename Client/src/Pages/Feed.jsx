@@ -45,24 +45,7 @@ const Feed = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     getFeed();
   }, []);
-  // if (loading && feed.length === 0) {
-  //   return (
-  //     <Container>
-  //       <div className="flex justify-center items-center mt-32">
-  //         <ClipLoader size={50} color="#4B5563" />
-  //       </div>
-  //     </Container>
-  //   );
-  // }
-
-  // 2️⃣ Feed is empty
-  // if (feed.length === 0) {
-  //   return (
-  //     <Container>
-  //       <p className="text-center mt-24">No more users to show 🙂</p>
-  //     </Container>
-  //   );
-  // }
+ 
 if (!loading && feed.length === 0 && !hasMore) {
   return (
     <Container>

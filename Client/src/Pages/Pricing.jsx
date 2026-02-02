@@ -5,9 +5,11 @@ import { FaCheck } from "react-icons/fa";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Pricing = () => {
   const [premimum, setPremimum] = useState(false);
   const [plan, setPlan] = useState('');
+  const{user}=useSelector((store)=>store.user);
   const navigate=useNavigate();
   const verifyPremimumUser = async () => {
     try {
@@ -26,6 +28,9 @@ const Pricing = () => {
     verifyPremimumUser();
   }, []);
   const handleBuy = async (type) => {
+      if(!user){
+        return navigate("/auth");
+      }
     try {
       const res = await axios.post(
         BASE_URL + "payment/create",
