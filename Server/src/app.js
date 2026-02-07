@@ -25,9 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 intializeSocket(server);
 app.use("/api/v1", v1router);
-app.get("/", (req, res) => {
-  res.send("ByteMate server is running!");
-});
+
 server.listen(process.env.PORT, () => {
   console.log("server started at 3000");
 });

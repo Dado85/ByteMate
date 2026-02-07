@@ -1,27 +1,31 @@
 const socket = require("socket.io");
-const {addmsgtoConversation}= require("../controller/msgController");
+const { addmsgtoConversation } = require("../controller/msgController");
+const onlineUsers = new Map();
 const intializeSocket = (server) => {
   const io = socket(server, {
     cors: {
       origin: "https://bytemateui.onrender.com",
+      
     },
   });
   io.on("connection", (socket) => {
     socket.on("joinChat", ({ loggedInuserId, msgUserId }) => {
       const roomId = [loggedInuserId, msgUserId].sort().join("_");
       console.log(roomId);
-
       socket.join(roomId);
     });
-    socket.on("sendMessage", async({ loggedInuserId, msgUserId, text }) => {
+    socket.on("sendMessage", async ({ loggedInuserId, msgUserId, text }) => {
       const roomId = [loggedInuserId, msgUserId].sort().join("_");
       console.log(msgUserId + "- send message =" + text);
-      const participants=[loggedInuserId,msgUserId];
-      const msg={
-        text,sender:loggedInuserId,reciever:msgUserId
+      const participants = [loggedInuserId, msgUserId];
+      const msg = {
+        text,
+        sender: loggedInuserId,
+        reciever: msgUserId,
       };
-      await addmsgtoConversation(participants,msg);
+      await addmsgtoConversation(participants, msg);
       io.to(roomId).emit("messageRecieved", { text, sender: loggedInuserId });
+      const receiverSocketId = onlineUsers.get(msgUserId);
     });
 
     socket.on("typing", ({ roomID, sender }) => {

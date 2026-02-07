@@ -8,26 +8,27 @@ import Header from "../Components/Header";
 import { Outlet, useNavigate } from "react-router-dom";
 
 function AppLayout() {
-  
   const dispatch = useDispatch();
-   const navigate=useNavigate();
-   const {user}=useSelector((state)=>state.user);
-  const fetchUser=async()=>{
-    if(user) return;
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+  const fetchUser = async () => {
+    if (user) return;
     try {
-        const res=await axios.get(BASE_URL+"profile/view",{withCredentials:true});
-       
-        dispatch(addUser(res.data))
+      const res = await axios.get(BASE_URL + "profile/view", {
+        withCredentials: true,
+      });
+
+      dispatch(addUser(res.data));
     } catch (error) {
-      if(error.status===401){
-      navigate("/auth")}
+      if (error.status === 401) {
+        navigate("/auth");
+      }
       console.error(error.message);
-      
     }
-  }
-useEffect(()=>{
-  fetchUser();
-},[])
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100">
       <Header />

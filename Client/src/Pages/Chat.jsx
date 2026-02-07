@@ -4,9 +4,8 @@ import Container from "../Components/Container";
 import { IoIosSend } from "react-icons/io";
 import { BASE_URL } from "../utils/constants";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { createSocketConnection } from "../utils/socket";
-import { addnewUserID } from "../utils/chatNotify";
 import axios from "axios";
 const Chat = () => {
   const { userId } = useParams();
@@ -19,25 +18,26 @@ const Chat = () => {
   const [newMsg, setnewMsg] = useState("");
   const [messages, setMessages] = useState([]);
   const [typer, setTyper] = useState(false);
-  const dispatch = useDispatch();
-   const fetchMsgs=async()=>{
-       const res=await axios.get(BASE_URL+"conversation/"+msgUserId,{withCredentials:true});
-       setMessages(res.data);
-   }
+  const fetchMsgs = async () => {
+    const res = await axios.get(BASE_URL + "conversation/" + msgUserId, {
+      withCredentials: true,
+    });
+    setMessages(res.data);
+  };
   useEffect(() => {
     if (!loggedInuserId || !msgUserId) return;
-  
+
     fetchMsgs();
     socket.current = createSocketConnection();
     socket.current.emit("joinChat", { loggedInuserId, msgUserId });
     socket.current.on("messageRecieved", ({ text, sender }) => {
       setMessages((prev) => [...prev, { text, sender }]);
-      setTyper(false)
-      dispatch(addnewUserID(sender));
+      setTyper(false);
+    
     });
     socket.current.on("typing", () => setTyper(true));
     socket.current.on("stopTyping", () => setTyper(false));
-   
+
     return () => {
       socket.current.disconnect();
     };
